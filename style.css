@@ -1,0 +1,1399 @@
+/* ==========================================================================
+   Sarthak Kalia — Corner Shop / Zine Street Editorial Design System
+   Aesthetic: Indie Street Culture × DIY Editorial × Archival Visuals
+   ========================================================================== */
+
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-panel: #141413;
+  --bg-light: #f1eee7;
+  --text-light: #f1eee7;
+  --text-dark: #0a0a0a;
+  --text-muted: #88847c;
+  --line-dark: #22211e;
+  --line-light: #d8d3c7;
+  
+  /* Loud Accidental Accents */
+  --accent-acid: #ccff00;    /* Acid Green */
+  --accent-orange: #ff3e00;  /* Safety Orange */
+  --accent-blue: #0044ff;    /* Electric Cobalt */
+  
+  --font-display: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --max-width: 1340px;
+  
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-snappy: 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: var(--bg-dark);
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-display);
+  overflow-x: hidden;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background Audio Widget (Double Decker - Eyekash) */
+.audio-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+}
+
+.audio-toggle-btn {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-acid);
+  color: var(--text-light);
+  padding: 10px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+  transition: all 0.2s ease;
+}
+
+.audio-toggle-btn:hover {
+  background: var(--accent-acid);
+  color: var(--text-dark);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--accent-orange);
+}
+
+.audio-toggle-btn.playing {
+  border-color: var(--accent-acid);
+  background: #181814;
+}
+
+/* Equalizer Animated Sound Bars */
+.sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+}
+
+.sound-bars span {
+  width: 3px;
+  height: 100%;
+  background: var(--accent-acid);
+  border-radius: 1px;
+  transition: height 0.2s ease;
+}
+
+.audio-toggle-btn.playing .sound-bars span:nth-child(1) {
+  animation: soundBarAnim 0.8s ease-in-out infinite alternate;
+}
+
+.audio-toggle-btn.playing .sound-bars span:nth-child(2) {
+  animation: soundBarAnim 0.6s ease-in-out infinite alternate 0.2s;
+}
+
+.audio-toggle-btn.playing .sound-bars span:nth-child(3) {
+  animation: soundBarAnim 0.9s ease-in-out infinite alternate 0.4s;
+}
+
+@keyframes soundBarAnim {
+  0% { height: 4px; }
+  100% { height: 14px; }
+}
+
+/* Marquee Top Ticker */
+.marquee-bar {
+  width: 100%;
+  background: var(--accent-acid);
+  color: var(--text-dark);
+  padding: 8px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 101;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--bg-dark);
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marqueeLoop 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 30px;
+  padding-right: 30px;
+}
+
+@keyframes marqueeLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Global Utility Classes */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.wrap {
+  width: min(calc(100% - 40px), var(--max-width));
+  margin-inline: auto;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.acid-text { color: var(--accent-acid); }
+.orange-text { color: var(--accent-orange); }
+
+/* Fade-Up Scroll Reveal */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Zine Navigation Bar */
+nav {
+  position: fixed;
+  z-index: 100;
+  top: 33px; /* account for top marquee */
+  left: 0;
+  right: 0;
+  padding: 16px 0;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line-dark);
+  transition: top 0.3s ease;
+}
+
+nav .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.logo-tag {
+  font-size: 10px;
+  color: var(--accent-acid);
+  background: #1a1a18;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid #2e2e2a;
+}
+
+.navlinks {
+  display: flex;
+  gap: 28px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+.navlinks a {
+  position: relative;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  padding: 4px 0;
+}
+
+.navlinks a:hover,
+.navlinks a.active {
+  color: var(--accent-acid);
+}
+
+.navlinks a.active::after {
+  content: "●";
+  position: absolute;
+  right: -10px;
+  top: 2px;
+  font-size: 8px;
+  color: var(--accent-orange);
+}
+
+.menu-btn {
+  display: none;
+  background: var(--bg-panel);
+  border: 1px solid var(--line-dark);
+  color: var(--text-light);
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+/* Mobile Nav Overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-overlay a {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.mobile-nav-overlay a:hover {
+  color: var(--accent-acid);
+}
+
+/* Hero Section (Raw Street Zine Banner) */
+.hero {
+  padding-top: 140px;
+  padding-bottom: 60px;
+}
+
+.hero-zine-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 40px;
+  align-items: end;
+}
+
+.huge-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.huge-title {
+  font-size: clamp(60px, 11vw, 150px);
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.huge-title.accent-title {
+  color: var(--accent-acid);
+  text-shadow: 3px 3px 0px var(--accent-orange);
+}
+
+.hero-tag-bar {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 2px solid var(--text-light);
+  padding-top: 18px;
+}
+
+.hero-tag-bar .tag-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tag-stamp {
+  background: var(--accent-orange);
+  color: #ffffff;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.hero-copy-zine {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #b8b3a8;
+  max-width: 480px;
+  margin-top: 20px;
+}
+
+.hero-actions-zine {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.btn-zine {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: 2px solid var(--text-light);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--text-light);
+  transition: all var(--transition-fast);
+  border-radius: 2px;
+}
+
+.btn-zine.primary {
+  background: var(--accent-acid);
+  color: var(--text-dark);
+  border-color: var(--accent-acid);
+}
+
+.btn-zine.primary:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  transform: translate(-3px, -3px);
+  box-shadow: 4px 4px 0px var(--accent-orange);
+}
+
+.btn-zine:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 4px 4px 0px var(--accent-acid);
+  border-color: var(--accent-acid);
+}
+
+/* Hero Editorial Showcase Frame Card */
+.hero-editorial-card {
+  position: relative;
+  background: var(--bg-panel);
+  border: 2px solid var(--line-dark);
+  padding: 14px;
+  transform: rotate(1.8deg);
+  transition: transform 0.4s ease;
+  box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.8);
+}
+
+.hero-editorial-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.tape-corner {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: rgba(241, 238, 231, 0.25);
+  color: #111;
+  padding: 4px 18px;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  transform: rotate(-4deg);
+  border: 1px dashed rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.editorial-img-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #000;
+}
+
+.editorial-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9);
+  transition: transform 0.6s ease;
+}
+
+.hero-editorial-card:hover .editorial-img-frame img {
+  transform: scale(1.06);
+}
+
+.editorial-card-info {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.editorial-num {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent-acid);
+}
+
+.editorial-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Street Label Slider Track (Brand-Based Selector) */
+.street-slider-wrap {
+  margin: 50px 0 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--line-dark);
+  padding-bottom: 24px;
+}
+
+.street-slider-track {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  background: #161614;
+  border: 2px solid #2e2e28;
+  padding: 4px;
+  border-radius: 4px;
+  gap: 2px;
+}
+
+.slider-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: 140px;
+  background: var(--accent-acid);
+  border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
+  z-index: 1;
+}
+
+.slider-option {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.slider-option:hover {
+  color: var(--text-light);
+}
+
+.slider-option.active {
+  color: var(--text-dark);
+}
+
+.slider-option-all {
+  background: transparent;
+  border: 2px dashed var(--line-dark);
+  color: var(--text-muted);
+  padding: 10px 18px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.slider-option-all:hover,
+.slider-option-all.active {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: rgba(255, 62, 0, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════
+   Brand Section Headers
+   ═══════════════════════════════════════════════════ */
+.brand-section-header {
+  grid-column: 1 / -1;
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.brand-section-header:first-child {
+  margin-top: 0;
+}
+
+.brand-section-header.hidden {
+  display: none !important;
+}
+
+.brand-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #161614 0%, #1a1a17 50%, #141412 100%);
+  border: 2px solid #2e2e28;
+  border-left: 4px solid var(--accent-acid);
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-header-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(204, 255, 0, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.brand-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.brand-header-label {
+  font-size: 9px;
+  color: var(--accent-acid);
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  background: rgba(204, 255, 0, 0.08);
+  padding: 2px 8px;
+  display: inline-block;
+  width: fit-content;
+  border: 1px solid rgba(204, 255, 0, 0.15);
+}
+
+.brand-header-name {
+  font-size: clamp(24px, 3.5vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  line-height: 1;
+}
+
+.brand-header-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.brand-insta-link {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(204, 255, 0, 0.06);
+  border: 1px solid rgba(204, 255, 0, 0.2);
+  color: var(--accent-acid);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 3px;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand-insta-link:hover {
+  background: var(--accent-acid);
+  color: var(--text-dark);
+  border-color: var(--accent-acid);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--accent-orange);
+}
+
+.brand-insta-icon {
+  font-size: 14px;
+}
+
+/* Asymmetrical Zine Work Grid Layout */
+.zine-work-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+/* Floating Editorial Card Styles */
+.zine-card {
+  position: relative;
+  background: var(--bg-panel);
+  border: 2px solid var(--line-dark);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zine-card.hidden {
+  display: none !important;
+}
+
+.zine-card:hover {
+  border-color: var(--accent-acid);
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+/* Asymmetrical Spans & Rotations */
+.zine-card.tilt-left { transform: rotate(-1.4deg); }
+.zine-card.tilt-right { transform: rotate(1.6deg); }
+
+.zine-card.tilt-left:hover,
+.zine-card.tilt-right:hover {
+  transform: rotate(0deg) translateY(-6px);
+}
+
+/* Brand-based grid spans: visually interesting asymmetric layout */
+/* The Earthly Life (4 cards: indices visible 1-4 within brand) */
+.zine-card:nth-of-type(n) { grid-column: span 4; min-height: 340px; }
+
+.zine-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.zine-card-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-orange);
+}
+
+.zine-card-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: #1f1f1c;
+  color: var(--accent-acid);
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid #33332c;
+}
+
+.zine-card-media {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 180px;
+  background: #000;
+  overflow: hidden;
+  border: 1px solid var(--line-dark);
+}
+
+.zine-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: contrast(1.1) brightness(0.9);
+  transition: transform 0.6s ease, opacity 0.4s ease;
+}
+
+.zine-card:hover .zine-card-media img {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.play-trigger {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: var(--text-light);
+  color: var(--text-dark);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  z-index: 3;
+}
+
+.zine-card:hover .play-trigger {
+  background: var(--accent-acid);
+  transform: scale(1.08);
+}
+
+.zine-card-body {
+  margin-top: 14px;
+}
+
+.zine-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.zine-card-caption {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Archival Stamp Sticker Badges */
+.stamp-sticker {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background: var(--accent-orange);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  transform: rotate(-6deg);
+  z-index: 5;
+  box-shadow: 2px 2px 0px #000;
+}
+
+/* Zine Section Banners / Moodboard Dividers */
+.zine-banner-section {
+  margin: 80px 0;
+  position: relative;
+  background: var(--bg-panel);
+  border: 2px solid var(--line-dark);
+  padding: 40px;
+  overflow: hidden;
+}
+
+.zine-banner-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  filter: contrast(1.2) brightness(0.6) blur(2px);
+  transform: scale(1.04);
+}
+
+.zine-banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 750px;
+}
+
+.zine-banner-content h3 {
+  font-size: clamp(28px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-top: 10px;
+}
+
+/* About Section Zine Style */
+.about-zine-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  border-top: 2px solid var(--text-light);
+  padding-top: 60px;
+}
+
+.about-zine-left h2 {
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.88;
+  letter-spacing: -0.07em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.about-zine-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.archival-specs-box {
+  margin-top: 30px;
+  padding: 20px;
+  background: #141412;
+  border: 1px solid #2e2e28;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-acid);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.archival-specs-box div span {
+  color: var(--text-muted);
+}
+
+/* Services Grid Zine */
+.services-zine {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 2px solid var(--line-dark);
+}
+
+.service-zine-card {
+  padding: 24px 16px 24px 0;
+  border-right: 1px solid var(--line-dark);
+}
+
+.service-zine-card:last-child {
+  border-right: 0;
+}
+
+.service-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent-orange);
+  margin-bottom: 16px;
+}
+
+.service-zine-card h4 {
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.service-zine-card p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Showreel Zine Box */
+.reel-zine-box {
+  position: relative;
+  min-height: 480px;
+  background: var(--bg-panel);
+  border: 2px solid var(--line-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.reel-zine-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+  filter: contrast(1.2) brightness(0.6);
+}
+
+.reel-zine-content {
+  position: relative;
+  z-index: 2;
+}
+
+.reel-big-text {
+  font-size: clamp(60px, 12vw, 150px);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+/* Contact Zine Layout */
+.contact-zine {
+  border-top: 2px solid var(--text-light);
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.contact-zine h2 {
+  font-size: clamp(54px, 10vw, 130px);
+  line-height: 0.85;
+  letter-spacing: -0.08em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.email-zine-link {
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent-acid);
+  border-bottom: 3px solid var(--accent-acid);
+  margin-top: 30px;
+  transition: all 0.2s ease;
+}
+
+.email-zine-link:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* In-Page Video Reel Modal (Raw Editorial Zine Player) */
+.reel-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.reel-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 4, 4, 0.95);
+  backdrop-filter: blur(18px);
+}
+
+.modal-container {
+  position: relative;
+  z-index: 2;
+  width: min(92%, 940px);
+  max-height: 90vh;
+  background: #111110;
+  border: 2px solid var(--accent-acid);
+  box-shadow: 16px 16px 0px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reel-modal.active .modal-container {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 16px 20px;
+  background: #181816;
+  border-bottom: 2px solid var(--line-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-tag {
+  color: var(--accent-acid);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.modal-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-nav-btn {
+  background: #242420;
+  border: 1px solid #3d3d36;
+  color: #fff;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: var(--accent-orange);
+  color: #fff;
+  border: 0;
+  width: 32px;
+  height: 32px;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  max-height: calc(90vh - 70px);
+  overflow-y: auto;
+}
+
+.modal-video-wrapper {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-height: 480px;
+}
+
+.modal-video-wrapper iframe {
+  width: 100%;
+  height: 520px;
+  max-width: 380px;
+  border: 0;
+  border-radius: 4px;
+}
+
+.modal-details {
+  padding: 24px;
+  background: #141412;
+  border-left: 2px solid var(--line-dark);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.modal-caption {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #c0bcb2;
+}
+
+/* Section Heading */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  border-top: 2px solid var(--text-light);
+  padding-top: 60px;
+  margin-bottom: 10px;
+}
+
+.section-head h2 {
+  font-size: clamp(36px, 6vw, 80px);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.section-head p {
+  max-width: 380px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Shared editorial section system */
+.content-section {
+  margin-top: 120px;
+}
+
+.section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section-rule {
+  width: 56px;
+  height: 2px;
+  flex: 0 0 auto;
+  background: var(--accent-orange);
+}
+
+/* About uses the same framed, archival treatment as the work cards. */
+.about-zine-grid {
+  border: 2px solid var(--line-dark);
+  border-left-color: var(--accent-acid);
+  background: var(--bg-panel);
+  padding: 38px;
+}
+
+.about-zine-left h2,
+.contact-zine h2 {
+  text-wrap: balance;
+}
+
+.archival-specs-box {
+  border-color: var(--line-dark);
+  background: #10100f;
+}
+
+.services-zine {
+  border: 2px solid var(--line-dark);
+  border-top: 0;
+  margin-top: 0;
+  background: #10100f;
+}
+
+.service-zine-card {
+  min-height: 176px;
+  padding: 24px 20px;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.service-zine-card:hover {
+  background: var(--accent-acid);
+  color: var(--text-dark);
+}
+
+.service-zine-card:hover .service-num,
+.service-zine-card:hover p {
+  color: var(--text-dark);
+}
+
+/* Contact follows the same panel and accent-bar pattern as the archive. */
+.contact-zine {
+  border-top: 0;
+  padding-top: 0;
+  padding-bottom: 100px;
+}
+
+.contact-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 42px;
+  background: var(--bg-panel);
+  border: 2px solid var(--line-dark);
+  border-left: 4px solid var(--accent-acid);
+}
+
+.contact-panel::after {
+  content: 'SK / 2026';
+  position: absolute;
+  right: 28px;
+  bottom: 16px;
+  color: rgba(204, 255, 0, 0.16);
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 7vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.contact-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.email-zine-link {
+  padding: 10px 0;
+  border-bottom-width: 2px;
+}
+
+/* Option Count Badge */
+.option-count {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.slider-option.active .option-count {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Footer */
+footer {
+  padding: 30px 0 50px;
+  border-top: 2px solid var(--line-dark);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.socials {
+  display: flex;
+  gap: 24px;
+}
+
+.socials a:hover {
+  color: var(--accent-acid);
+}
+
+/* Responsive Styles */
+@media (max-width: 1100px) {
+  .street-slider-track {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .slider-pill {
+    display: none;
+  }
+
+  .slider-option.active {
+    background: var(--accent-acid);
+    color: var(--text-dark);
+    border-radius: 2px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-zine-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-editorial-card {
+    max-width: 340px;
+  }
+
+  .zine-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zine-card:nth-of-type(n) {
+    grid-column: span 1 !important;
+    min-height: 380px !important;
+  }
+
+  .brand-section-header {
+    grid-column: 1 / -1 !important;
+  }
+
+  .brand-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .about-zine-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .services-zine {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-details {
+    border-left: 0;
+    border-top: 2px solid var(--line-dark);
+  }
+
+  .audio-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .about-zine-grid {
+    padding: 28px;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 800px) {
+  .navlinks { display: none; }
+  .menu-btn { display: flex; align-items: center; justify-content: center; }
+  .street-slider-wrap { flex-direction: column; align-items: flex-start; }
+  .content-section { margin-top: 80px; }
+  .section-kicker { gap: 8px; flex-wrap: wrap; }
+  .section-rule { width: 32px; }
+  .about-zine-grid, .contact-panel { padding: 24px 20px; }
+  .service-zine-card { min-height: 148px; }
+  .contact-zine { padding-bottom: 64px; }
+  .email-zine-link { font-size: clamp(16px, 5vw, 24px); overflow-wrap: anywhere; }
+}
